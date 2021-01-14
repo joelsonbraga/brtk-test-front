@@ -17,7 +17,6 @@ class PersonCollection extends ResourceCollection
         $collection = $this->resource->toArray();
         $collection['data'] = $this->collection->map(function ($item, $key) {
             return [
-                'id'   => $item->id,
                 'uuid' => $item->uuid,
                 'person_id' => $item->person_id,
                 'cpf'       => $item->cpf,
