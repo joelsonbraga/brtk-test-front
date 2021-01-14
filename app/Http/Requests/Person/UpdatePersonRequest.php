@@ -62,8 +62,8 @@ class UpdatePersonRequest extends FormRequest
             'name.required'       => __('The name is required.'),
             'email.required'      => __('The email is required.'),
             'email.unique'        => __('There is already a user with this e-mail.'),
-            'phone.required'  => __('The cellphone is required.'),
-            'phone.unique'  => __('The cellphone has already been taken.'),
+            'phone.required'  => __('The phone is required.'),
+            'phone.unique'  => __('The phone has already been taken.'),
         ];
     }
 }
