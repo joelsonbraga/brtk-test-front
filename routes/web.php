@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::prefix('person')->group(function() {
+    Route::get('/', 'PersonController@index')->name('person.all');
+    Route::get('/show/{uuid}', 'PersonController@show')->name('person.show');
+    Route::get('/add', 'PersonController@add')->name('person.add');
+    Route::post('/store', 'PersonController@store')->name('person.store');
+    Route::get('/edit/{uuid}', 'PersonController@edit')->name('person.edit');
+    Route::put('/update/{uuid}', 'PersonController@update')->name('person.edit');
+    Route::delete('/delete/{uuid}', 'PersonController@delete')->name('person.delete');
+});

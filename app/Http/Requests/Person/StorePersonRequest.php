@@ -33,7 +33,6 @@ class StorePersonRequest extends FormRequest
             'cpf' => [
                 'required',
                 'regex:/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/',
-                Rule::unique('persons'),
             ],
             'name' => [
                 'required',
@@ -41,11 +40,9 @@ class StorePersonRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('persons'),
             ],
             'phone' => [
                 'required',
-                Rule::unique('persons'),
             ],
         ];
     }
