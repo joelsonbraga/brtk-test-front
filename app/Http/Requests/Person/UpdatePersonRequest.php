@@ -28,9 +28,6 @@ class UpdatePersonRequest extends FormRequest
             'cpf' => [
                 'required',
                 'regex:/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/',
-                Rule::unique('persons')->where(function ($query) {
-                    $query->where('uuid', '<>', $this->uuid);
-                }),
             ],
             'name' => [
                 'required',
@@ -38,15 +35,9 @@ class UpdatePersonRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('persons')->where(function ($query) {
-                    $query->where('uuid', '<>', $this->uuid);
-                }),
             ],
             'phone' => [
                 'required',
-                Rule::unique('persons')->where(function ($query) {
-                    $query->where('uuid', '<>', $this->uuid);
-                }),
             ],
         ];
     }

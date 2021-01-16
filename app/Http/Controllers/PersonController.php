@@ -25,8 +25,9 @@ class PersonController extends Controller
 
     public function index ()
     {
-        $response = Http::get('http://127.0.0.1:8001/api/v1/person/all');
-        return view('welcome');
+        $response = Http::get($this->api . 'api/v1/person/all');
+        return view('person.index')
+            ->with('persons', $response->json()['data']);
     }
 
     /**
@@ -37,6 +38,10 @@ class PersonController extends Controller
         return view('person.add');
     }
 
+    /**
+     * @param StorePersonRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store (StorePersonRequest $request)
     {
         try {
@@ -61,22 +66,69 @@ class PersonController extends Controller
 
     }
 
-    public function show ()
+    /**
+     * @param string $uuid
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function edit (string $uuid)
     {
-        dd('here');
+        $response = Http::get($this->api . 'api/v1/person/show/' . $uuid);
+        return view('person.edit')
+            ->with('person', $response->json());
     }
 
-    public function edit ()
+    /**
+     * @param UpdatePersonRequest $request
+     * @param string $uuid
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update (UpdatePersonRequest $request, string $uuid)
     {
-        dd('here');
+        try {
+            $validated = $request->validated();
+
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->put($this->api . 'api/v1/person/update/' . $uuid, $validated);
+
+            if ($response->failed() === true) {
+                throw new RequestException($response);
+            }
+        } catch (RequestException $e) {
+            return redirect()
+                ->route('person.edit', $uuid)
+                ->with('errors', $e->response->json());
+        }
+
+        return redirect()
+            ->route('person.index')
+            ->with('success', 'Person successfully updated!');
     }
 
-    public function update ()
+    /**
+     * @param string $uuid
+     * @return \Illuminate\Http\RedasdfadsfirectResponse
+     */
+    public function delete (string $uuid)
     {
-        dd('here');
-    }
-    public function delete ()
-    {
-        dd('here');
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->delete($this->api . 'api/v1/person/delete/' . $uuid);
+
+            if ($response->failed() === true) {
+                throw new RequestException($response);
+            }
+        } catch (RequestException $e) {
+            return redirect()
+                ->route('person.index', $uuid)
+                ->with('errors', $e->response->json());
+        }
+
+        return redirect()
+            ->route('person.index')
+            ->with('success', 'Person successfully deleted!');
     }
 }
